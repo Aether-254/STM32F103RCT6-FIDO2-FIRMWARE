@@ -25,6 +25,9 @@
 #include "fido_usb.h"
 #include "ctap_credential.h"
 #include "board_keys.h"
+#ifdef KEY_OTP_SELFTEST
+#include "key_otp_selftest.h"
+#endif
 #ifdef KEY_SD_READONLY_DIAGNOSTIC
 #include "board_sd.h"
 #endif
@@ -100,6 +103,9 @@ int main(void)
    * inputs exist. Never bind host RAM/test keys as production credentials. */
   ctap_credential_init(&credential_engine, NULL, NULL);
   if (!fido_usb_bind_jobs(&ctap_credential_jobs, &credential_engine)) Error_Handler();
+#ifdef KEY_OTP_SELFTEST
+  key_otp_selftest_run(fido_usb_poll);
+#endif
 #ifdef KEY_SD_READONLY_DIAGNOSTIC
   board_sd_diagnose();
 #endif

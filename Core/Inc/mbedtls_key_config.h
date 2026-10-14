@@ -7,6 +7,8 @@
 #define MBEDTLS_PLATFORM_STD_MEM_HDR "mbedtls_key_platform.h"
 #define MBEDTLS_MEMORY_BUFFER_ALLOC_C
 #define MBEDTLS_SHA256_C
+#define MBEDTLS_SHA1_C
+#define MBEDTLS_SHA512_C
 #define MBEDTLS_MD_C
 #define MBEDTLS_HMAC_DRBG_C
 #define MBEDTLS_HKDF_C

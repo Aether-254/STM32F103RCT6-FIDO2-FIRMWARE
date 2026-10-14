@@ -5,7 +5,7 @@ endif()
 set(KEY_MBEDTLS_MODULES
     asn1parse asn1write bignum bignum_core bignum_mod bignum_mod_raw
     chacha20 chachapoly constant_time ecdsa ecp ecp_curves
-    hkdf hmac_drbg md memory_buffer_alloc platform platform_util poly1305 sha256)
+    hkdf hmac_drbg md memory_buffer_alloc platform platform_util poly1305 sha1 sha256 sha512)
 set(KEY_MBEDTLS_SOURCES)
 foreach(module IN LISTS KEY_MBEDTLS_MODULES)
     list(APPEND KEY_MBEDTLS_SOURCES "${KEY_MBEDTLS_DIR}/library/${module}.c")

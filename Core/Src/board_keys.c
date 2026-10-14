@@ -30,5 +30,6 @@ bool board_keys_pressed(void *context) {
     (void)context;
     return initialized && board_keys_snapshot.raw_mask != 0;
 }
-/* Raw diagnostic rises are not authorization tokens. Request-bound 25ms
- * release->press consent remains the key_presence frontend's responsibility. */
+/* Raw diagnostic rises are not authorization tokens. Request-bound continuous
+ * one-second consent is enforced by key_presence. Do not bind this any-key
+ * diagnostic predicate as the explicitly enabled BOTH-key fallback. */

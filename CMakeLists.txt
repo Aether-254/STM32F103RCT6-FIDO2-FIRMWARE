@@ -34,6 +34,11 @@ enable_language(C ASM)
 # Create an executable object type
 add_executable(${CMAKE_PROJECT_NAME})
 option(KEY_SD_READONLY_DIAGNOSTIC "Read-only SPI SD startup diagnostic (no card writes)" OFF)
+option(KEY_OTP_SELFTEST "Public RFC OTP startup self-test (no real secrets/storage writes)" OFF)
+if(KEY_OTP_SELFTEST)
+    target_sources(${CMAKE_PROJECT_NAME} PRIVATE Core/Src/key_otp_selftest.c)
+    target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE KEY_OTP_SELFTEST)
+endif()
 if(KEY_SD_READONLY_DIAGNOSTIC)
     target_sources(${CMAKE_PROJECT_NAME} PRIVATE Core/Src/board_sd.c)
     target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE KEY_SD_READONLY_DIAGNOSTIC)
@@ -66,6 +71,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Core/Src/key_backend.c
     Core/Src/board_keys.c
     Core/Src/key_sd_readonly.c
+    Core/Src/key_otp.c
     USB_DEVICE/App/fido_usb.c
 )
 
@@ -110,4 +116,10 @@ foreach(api init dispose ops)
 endforeach()
 foreach(api begin sample sample_inputs cancel consume reset progress)
     target_link_options(${CMAKE_PROJECT_NAME} PRIVATE "-Wl,--undefined=key_presence_${api}")
+endforeach()
+
+# Retain the real OTP implementation in resource measurements even before RTC
+# and private-data UI integration. This does not execute or provision it.
+foreach(api hotp totp)
+    target_link_options(${CMAKE_PROJECT_NAME} PRIVATE "-Wl,--undefined=key_otp_${api}")
 endforeach()
