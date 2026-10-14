@@ -1,0 +1,13 @@
+[project]
+name = "stm32-fido2-host-tests"
+version = "0.1.0"
+description = "Host tests and diagnostics for the experimental STM32 authenticator"
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+test = ["pytest==9.1.1", "ziglang==0.16.0", "fido2==2.2.1"]
+hardware = ["pyocd==0.45.1", "hidapi==0.15.0", "fido2==2.2.1"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

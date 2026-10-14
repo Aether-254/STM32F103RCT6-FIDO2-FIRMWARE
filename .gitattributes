@@ -1,0 +1,19 @@
+* text=auto
+*.c text eol=lf
+*.h text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.json text eol=lf
+*.toml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.ps1 text eol=lf
+*.s text eol=lf
+*.cmake text eol=lf
+*.ioc text eol=lf
+*.png binary
+*.jpg binary
+*.pdf binary
+# Preserve upstream manifest bytes on Windows checkouts (including LICENSE).
+third_party/mbedtls-3.6.7/** text eol=lf

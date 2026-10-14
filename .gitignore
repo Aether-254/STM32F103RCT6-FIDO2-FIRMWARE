@@ -1,0 +1,35 @@
+/build/
+/.venv/
+/.pytest_cache/
+**/__pycache__/
+# Hardware backups may contain private state; keep local and out of public repos.
+/backup/
+# Project documentation stays local by owner request (2026-10-14).
+/docs/
+/design/
+/README.md
+/CONTEXT.md
+# Local hardware state, review comments and unpublished upstream research.
+/.vscode/
+/.mxproject
+/9.7z
+/design/figma/
+/docs/board-reference/
+/third_party/canokey-stm32-reference/
+# Credentials and private signing/provisioning inputs must never be published.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.bin
+*.elf
+*.hex
+*.map
+*.log
+*.pyc
+*.7z
+*.zip
+/.publish-audit/
