@@ -25,6 +25,9 @@
 #include "fido_usb.h"
 #include "ctap_credential.h"
 #include "board_keys.h"
+#ifdef KEY_LCD_DIAGNOSTIC
+#include "board_lcd.h"
+#endif
 #ifdef KEY_OTP_SELFTEST
 #include "key_otp_selftest.h"
 #endif
@@ -109,6 +112,9 @@ int main(void)
 #ifdef KEY_SD_READONLY_DIAGNOSTIC
   board_sd_diagnose();
 #endif
+#ifdef KEY_LCD_DIAGNOSTIC
+  board_lcd_diagnose();
+#endif
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -120,6 +126,9 @@ int main(void)
     /* USER CODE BEGIN 3 */
     board_keys_poll();
     fido_usb_poll();
+#ifdef KEY_LCD_DIAGNOSTIC
+    board_lcd_poll();
+#endif
   }
   /* USER CODE END 3 */
 }
