@@ -27,7 +27,7 @@
 #include "usbd_custom_hid_if.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "board_usb_boot.h"
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN PV */
@@ -64,7 +64,7 @@ USBD_HandleTypeDef hUsbDeviceFS;
 void MX_USB_DEVICE_Init(void)
 {
   /* USER CODE BEGIN USB_DEVICE_Init_PreTreatment */
-
+  board_usb_boot_disconnect();
   /* USER CODE END USB_DEVICE_Init_PreTreatment */
 
   /* Init Device Library, add supported class and start the library. */

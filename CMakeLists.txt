@@ -82,6 +82,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Core/Src/key_random.c
     Core/Src/key_backend.c
     Core/Src/board_keys.c
+    Core/Src/board_usb_boot.c
     Core/Src/key_sd_readonly.c
     Core/Src/key_otp.c
     Core/Src/key_lcd.c
