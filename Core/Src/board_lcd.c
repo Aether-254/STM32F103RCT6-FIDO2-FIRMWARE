@@ -1,6 +1,10 @@
 #include "board_lcd.h"
 #include "board_keys.h"
 #include "key_lcd.h"
+#ifdef KEY_LCD_UI
+#include "key_ui.h"
+static key_ui ui;
+#endif
 #include "fido_usb.h"
 #include "stm32f1xx_hal.h"
 #include <string.h>
@@ -67,6 +71,17 @@ static void delay_ms(void *context, uint32_t ms) {
 static int rect(unsigned x, unsigned y, unsigned w, unsigned h, uint16_t color) {
     return key_lcd_fill(&panel, (uint16_t)x, (uint16_t)y, (uint16_t)w, (uint16_t)h, color);
 }
+#ifdef KEY_LCD_UI
+static int ui_rectangle(void *ctx, uint16_t x, uint16_t y,
+                        uint16_t w, uint16_t h, uint16_t color) {
+    (void)ctx;
+    return rect(x,y,w,h,color);
+}
+static int pattern(void) {
+    key_ui_init(&ui, HAL_GetTick());
+    return key_ui_render(&ui,ui_rectangle,NULL);
+}
+#else
 static int hex_digit(unsigned x, unsigned y, unsigned digit) {
     static const uint8_t segments[16] = {
         0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,
@@ -93,6 +108,7 @@ static int pattern(void) {
     }
     return 0;
 }
+#endif
 void board_lcd_diagnose(void) {
     memset((void *)&board_lcd_snapshot,0,sizeof(board_lcd_snapshot));
     board_lcd_snapshot.sequence = 1;
@@ -129,12 +145,20 @@ void board_lcd_poll(void) {
     if (!panel.ready || board_lcd_snapshot.render_result || (uint32_t)(now-last_poll)<50) return;
     last_poll=now;
     uint32_t keys=board_keys_snapshot.raw_mask;
+#ifdef KEY_LCD_UI
+    const key_ui previous=ui;
+    bool redraw=key_ui_poll(&ui,now,(uint8_t)keys);
+    if (!redraw && keys==board_lcd_snapshot.key_mask) return;
+    ++board_lcd_snapshot.sequence;
+    if (redraw) board_lcd_snapshot.render_result=key_ui_render_update(&ui,&previous,ui_rectangle,NULL);
+#else
     if (keys==board_lcd_snapshot.key_mask) return;
     ++board_lcd_snapshot.sequence;
     /* Raw navigation indicators only, never authentication or fallback consent. */
     int rc=rect(16,200,96,32,(keys&1)?0xe50f:0x3186);
     if (!rc) rc=rect(128,200,96,32,(keys&2)?0xe50f:0x3186);
     board_lcd_snapshot.render_result=rc;
+#endif
     board_lcd_snapshot.key_mask=keys;
     board_lcd_snapshot.tick=now;
     ++board_lcd_snapshot.sequence;

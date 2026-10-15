@@ -36,6 +36,13 @@ add_executable(${CMAKE_PROJECT_NAME})
 option(KEY_SD_READONLY_DIAGNOSTIC "Read-only SPI SD startup diagnostic (no card writes)" OFF)
 option(KEY_OTP_SELFTEST "Public RFC OTP startup self-test (no real secrets/storage writes)" OFF)
 option(KEY_LCD_DIAGNOSTIC "Probe MINI LCD and draw bounded test pattern (no SD)" OFF)
+option(KEY_LCD_UI "No-SD navigation UI instead of LCD test pattern" OFF)
+if(KEY_LCD_UI)
+    if(NOT KEY_LCD_DIAGNOSTIC OR KEY_SD_READONLY_DIAGNOSTIC)
+        message(FATAL_ERROR "KEY_LCD_UI requires LCD diagnostic ON and SD diagnostic OFF")
+    endif()
+    target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE KEY_LCD_UI)
+endif()
 if(KEY_LCD_DIAGNOSTIC)
     target_sources(${CMAKE_PROJECT_NAME} PRIVATE Core/Src/board_lcd.c)
     target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE KEY_LCD_DIAGNOSTIC)
@@ -78,6 +85,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Core/Src/key_sd_readonly.c
     Core/Src/key_otp.c
     Core/Src/key_lcd.c
+    Core/Src/key_ui.c
     USB_DEVICE/App/fido_usb.c
 )
 

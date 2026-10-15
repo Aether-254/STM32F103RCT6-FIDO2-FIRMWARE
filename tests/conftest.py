@@ -38,6 +38,7 @@ def lib():
         str(ROOT / "Core/Src/key_otp.c"),
         str(ROOT / "Core/Src/key_otp_selftest.c"),
         str(ROOT / "Core/Src/key_lcd.c"),
+        str(ROOT / "Core/Src/key_ui.c"),
         str(ROOT / "Core/Src/board_keys.c"), str(ROOT / "tests/board_harness.c"),
         str(ROOT / "Core/Src/stm32f1xx_hal_msp.c"),
         *crypto_sources, "-o", str(output)
