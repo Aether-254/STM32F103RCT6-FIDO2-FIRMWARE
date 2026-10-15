@@ -38,7 +38,8 @@ int key_lcd_init(key_lcd *lcd, const key_lcd_bus *bus, void *context) {
     if (write_word(lcd, false, 0x11)) return KEY_LCD_IO;
     lcd->bus.delay_ms(context, 120);
     if (write_word(lcd, false, 0x3a) || write_word(lcd, true, 0x55) ||
-        write_word(lcd, false, 0x36) || write_word(lcd, true, 0x28) ||
+        /* Portrait, inverted mounting: MY+BGR, MV=0 (240x320). */
+        write_word(lcd, false, 0x36) || write_word(lcd, true, 0x88) ||
         write_word(lcd, false, 0x29)) return KEY_LCD_IO;
     lcd->ready = true;
     return 0;

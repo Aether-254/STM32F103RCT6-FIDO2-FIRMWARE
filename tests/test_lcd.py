@@ -56,13 +56,13 @@ def initialize(lib, panel):
     return rc, lcd
 
 
-def test_probe_before_initialization_and_landscape_rgb565(lib):
+def test_probe_before_initialization_and_portrait_rgb565(lib):
     panel = Panel()
     rc, lcd = initialize(lib, panel)
     assert rc == 0 and lcd.ready and lcd.controller == 0x9341
     assert panel.writes == [(False, 4), (False, 0xd3), (False, 1), (False, 0x11),
                             (False, 0x3a), (True, 0x55), (False, 0x36),
-                            (True, 0x28), (False, 0x29)]
+                            (True, 0x88), (False, 0x29)]
     assert panel.delays == [150, 120]
 
 
@@ -80,14 +80,14 @@ def test_rect_window_exact_coordinates_and_pixel_count(lib):
     panel = Panel()
     _, lcd = initialize(lib, panel)
     panel.writes.clear()
-    assert lib.key_lcd_fill(C.byref(lcd), 318, 238, 2, 2, 0xf81f) == 0
-    assert panel.writes == [(False, 0x2a), (True, 1), (True, 62), (True, 1), (True, 63),
-                            (False, 0x2b), (True, 0), (True, 238), (True, 0), (True, 239),
+    assert lib.key_lcd_fill(C.byref(lcd), 238, 318, 2, 2, 0xf81f) == 0
+    assert panel.writes == [(False, 0x2a), (True, 0), (True, 238), (True, 0), (True, 239),
+                            (False, 0x2b), (True, 1), (True, 62), (True, 1), (True, 63),
                             (False, 0x2c)] + [(True, 0xf81f)] * 4
 
 
-@pytest.mark.parametrize('rect', [(320,0,1,1), (0,240,1,1), (319,0,2,1),
-    (0,239,1,2), (0,0,0,1), (0,0,1,0), (0,0,65535,1), (65535,0,1,1)])
+@pytest.mark.parametrize('rect', [(240,0,1,1), (0,320,1,1), (239,0,2,1),
+    (0,319,1,2), (0,0,0,1), (0,0,1,0), (0,0,65535,1), (65535,0,1,1)])
 def test_invalid_rectangles_do_not_issue_bus_transactions(lib, rect):
     panel = Panel()
     _, lcd = initialize(lib, panel)
@@ -100,7 +100,7 @@ def test_full_screen_is_streamed_with_bounded_service_intervals(lib):
     panel = Panel()
     _, lcd = initialize(lib, panel)
     panel.writes.clear()
-    assert lib.key_lcd_fill(C.byref(lcd), 0, 0, 320, 240, 0x1234) == 0
+    assert lib.key_lcd_fill(C.byref(lcd), 0, 0, 240, 320, 0x1234) == 0
     assert len(panel.writes) == 11 + 320 * 240
     assert panel.services == 601
 

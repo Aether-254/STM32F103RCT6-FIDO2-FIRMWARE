@@ -81,15 +81,15 @@ static int hex_digit(unsigned x, unsigned y, unsigned digit) {
     return 0;
 }
 static int pattern(void) {
-    if (rect(0,0,320,240,0x18c3)) return KEY_LCD_IO;
+    if (rect(0,0,KEY_LCD_WIDTH,KEY_LCD_HEIGHT,0x18c3)) return KEY_LCD_IO;
     for (unsigned i = 0; i < 4; ++i)
-        if (hex_digit(102 + 30*i,24,panel.controller >> (12-4*i))) return KEY_LCD_IO;
-    if (rect(16,84,96,28,0xf800) || rect(112,84,96,28,0x07e0) ||
-        rect(208,84,96,28,0x001f)) return KEY_LCD_IO;
+        if (hex_digit(62 + 30*i,24,panel.controller >> (12-4*i))) return KEY_LCD_IO;
+    if (rect(16,110,69,32,0xf800) || rect(85,110,69,32,0x07e0) ||
+        rect(154,110,70,32,0x001f)) return KEY_LCD_IO;
     for (unsigned i = 0; i < 16; ++i) {
         unsigned v = i * 31 / 15;
-        uint16_t gray = (uint16_t)((v << 11) | ((v * 2) << 5) | v);
-        if (rect(16+i*18,208,18,16,gray)) return KEY_LCD_IO;
+        uint16_t gray = (uint16_t)((v << 11) | ((i * 63 / 15) << 5) | v);
+        if (rect(16+i*13,272,13,16,gray)) return KEY_LCD_IO;
     }
     return 0;
 }
@@ -132,8 +132,8 @@ void board_lcd_poll(void) {
     if (keys==board_lcd_snapshot.key_mask) return;
     ++board_lcd_snapshot.sequence;
     /* Raw navigation indicators only, never authentication or fallback consent. */
-    int rc=rect(16,150,136,32,(keys&1)?0xe50f:0x3186);
-    if (!rc) rc=rect(168,150,136,32,(keys&2)?0xe50f:0x3186);
+    int rc=rect(16,200,96,32,(keys&1)?0xe50f:0x3186);
+    if (!rc) rc=rect(128,200,96,32,(keys&2)?0xe50f:0x3186);
     board_lcd_snapshot.render_result=rc;
     board_lcd_snapshot.key_mask=keys;
     board_lcd_snapshot.tick=now;

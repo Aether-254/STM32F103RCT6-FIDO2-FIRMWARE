@@ -2,8 +2,8 @@
 #define KEY_LCD_H
 #include "key_crypto.h"
 #include <stdbool.h>
-#define KEY_LCD_WIDTH 320u
-#define KEY_LCD_HEIGHT 240u
+#define KEY_LCD_WIDTH 240u
+#define KEY_LCD_HEIGHT 320u
 #define KEY_LCD_ARGUMENT (-1)
 #define KEY_LCD_IO (-2)
 #define KEY_LCD_UNSUPPORTED (-3)
